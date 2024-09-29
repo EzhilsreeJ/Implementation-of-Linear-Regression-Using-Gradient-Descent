@@ -8,91 +8,92 @@ To write a program to predict the profit of a city using the linear regression m
 2. Anaconda – Python 3.7 Installation / Jupyter notebook
 
 ## Algorithm
-1. Import necessary libraries such as NumPy, Pandas, Matplotlib, and metrics from sklearn.
-2. Load the dataset into a Pandas DataFrame and preview it using `head()` and `tail()`.
-3. Extract the independent variable X and dependent variable Y from the dataset.
-4. Initialize the slope m and intercept c to zero. Set the learning rate L and define the number of epochs.
-5. In a loop over the number of epochs:
-   - Compute the predicted value Y_pred using the formula
+Step 1. Start
 
-     ![image](https://github.com/user-attachments/assets/ebd849e9-b41f-43c8-804f-d731cf9fd2fa)
+Step 2. Import numpy as np
 
-   - Calculate the gradients:
+Step 3. Plot the points
 
-     ![image](https://github.com/user-attachments/assets/794b5516-9a45-45c3-b86f-c732ec4f0b60)
+Step 4. IntiLiaze thhe program
 
-   - Update the parameters m and c using the gradients and learning rate.
-   - Track and store the error in each epoch.
-6. Plot the error against the number of epochs to visualize the convergence.
-7. Display the final values of m and c, and the error plot.
+Step 5.End
 
 ## Program:
-
-# Program to implement the linear regression using gradient descent.
-# Developed by: EZHIL SREE J
-# RegisterNumber:  212223230056
 ```
+ /*
+Program to implement the linear regression using gradient descent.
+Developed by: EZHIL SREE J
+RegisterNumber:  212223230056
+*/
+
+ 
 import numpy as np
 import pandas as pd
-from sklearn.metrics import  mean_absolute_error,mean_squared_error
-import matplotlib.pyplot as plt
-```
-```
-dataset = pd.read_csv('student_scores.csv')
-print(dataset.head())
-print(dataset.tail())
-```
-# OUTPUT:
-![image](https://github.com/user-attachments/assets/f8f6f4c7-d0bb-4af2-94bd-b78151350a61)
-```
-dataset.info()
-```
-# OUTPUT:
-![image](https://github.com/user-attachments/assets/3b214f2e-5bdc-4132-ab96-c7c5bd56b6b7)
+from sklearn.preprocessing import StandardScaler
 
-```
-X=dataset.iloc[:,:-1].values
+def linear_regression(X1,y,learning_rate = 0.1, num_iters = 1000):
+    X = np.c_[np.ones(len(X1)),X1]
+    
+    theta = np.zeros(X.shape[1]).reshape(-1,1)
+    
+    for _ in range(num_iters):
+        
+        #calculate predictions
+        predictions = (X).dot(theta).reshape(-1,1)
+        
+        #calculate errors
+        errors=(predictions - y ).reshape(-1,1)
+        
+        #update theta using gradiant descent
+        theta -= learning_rate*(1/len(X1))*X.T.dot(errors)
+    return theta
+                                        
+data=pd.read_csv("C:/classes/ML/50_Startups.csv")
+data.head()
+
+#assuming the lost column is your target variable 'y' 
+
+X = (data.iloc[1:,:-2].values)
+X1=X.astype(float)
+
+scaler = StandardScaler()
+y=(data.iloc[1:,-1].values).reshape(-1,1)
+X1_Scaled = scaler.fit_transform(X1)
+Y1_Scaled = scaler.fit_transform(y)
 print(X)
-Y=dataset.iloc[:,-1].values
-print(Y)
-```
-# OUTPUT:
-![image](https://github.com/user-attachments/assets/807f36ce-d4d2-4458-aa7a-d4e0ca1b800b)
-![image](https://github.com/user-attachments/assets/3ce0e8bf-2868-42ea-8e30-8b2586eac026)
+print(X1_Scaled)
 
-```
-print(X.shape)
-print(Y.shape)
-```
-# OUTPUT:
-![image](https://github.com/user-attachments/assets/86a832bf-2943-40d7-9afc-091547b71796)
-```
-m=0
-c=0
-L=0.0001
-epochs=5000
-n=float(len(X))
-error=[]
-for i in range(epochs):
-    Y_pred = m*X +c
-    D_m=(-2/n)*sum(X *(Y-Y_pred))
-    D_c=(-2/n)*sum(Y -Y_pred)
-    m=m-L*D_m
-    c=c-L*D_c
-    error.append(sum(Y-Y_pred)**2)
-print(m,c)
-type(error)
-print(len(error))
-```
-# OUTPUT:
-![image](https://github.com/user-attachments/assets/61b593aa-5cc1-4367-a135-7b10090b318c)
+#learn modwl paramerers
 
-```
-plt.plot(range(0,epochs),error)
-```
-# OUTPUT:
-![image](https://github.com/user-attachments/assets/e461ca97-1b19-44e5-9049-0cd59f8ae323)
+theta=linear_regression(X1_Scaled,Y1_Scaled)
 
+#predict target value for a new data
+new_data=np.array([165349.2,136897.8,471784.1]).reshape(-1,1)
+new_Scaled=scaler.fit_transform(new_data)
+prediction=np.dot(np.append(1,new_Scaled),theta)
+prediction=prediction.reshape(-1,1)
+pre=scaler.inverse_transform(prediction)
+print(prediction)
+print(f"Predicted value: {pre}")
+```
+
+## Output:
+## DATA.HEAD()
+![image](https://github.com/user-attachments/assets/bb239ebb-63ce-4658-bc5d-38f1057a1ab1)
+
+ 
+
+## X VALUE: 
+![image](https://github.com/user-attachments/assets/2bd0bf97-270e-4be7-b4d4-0b773d3d4bd3)
+
+## X1_SCALED VALUE:
+![image](https://github.com/user-attachments/assets/206fa636-a6d1-4bee-80db-cff69bacd36f)
+
+ 
+## PREDICTED VALUES:
+![image](https://github.com/user-attachments/assets/4880344f-29f6-4b3f-ab98-b6245aa5b221)
+
+ 
 
 
 
